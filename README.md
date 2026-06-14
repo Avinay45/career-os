@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CareerOS | AI-Powered Career Operating System
 
-## Getting Started
+CareerOS is a high-performance, dark-mode career advancement workspace designed to streamline the job search process. It integrates resume parsing, real-time ATS optimization, cover letter generation, interactive mock interview simulations, and Kanban application tracking into a unified, serverless dashboard.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Key Features
+
+*   **Resume Intelligence**: Automatically parses and extracts skills, certifications, and formatting metrics from resumes.
+*   **ATS Score Simulator**: Scores resumes across Formatting, Keyword Density, Impact, and Readability with actionable improvement suggestions.
+*   **Job Description Matcher**: Compares candidate profiles directly with target job descriptions to identify skill alignments and missing keywords.
+*   **Cover Letter Generator**: Dynamically drafts personalized, role-specific cover letters using candidate resume context and job expectations.
+*   **Interactive Mock Interviews**: Simulated behavioral and technical prep sessions with AI-driven scoring, feedback, weakness logging, and personalized study guides.
+*   **Kanban Application Tracker**: Track job applications from wishlist to screen, technical round, and accepted offers.
+*   **Real-Time AI Coach (SSE Streaming)**: Server-Sent Events stream answers word-by-word with tab-targeted context pruning to minimize latency and token usage.
+
+---
+
+## 🛠️ Technology Stack
+
+*   **Framework**: [Next.js](https://nextjs.org/) (App Router, Server Actions, Turbopack)
+*   **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Row-Level Security (RLS), triggers, and DB functions)
+*   **AI Inference**: [OpenRouter API](https://openrouter.ai/) (Model: `nousresearch/hermes-3-llama-3.1-70b`)
+*   **Styling**: Tailwind CSS, CSS Variables, and Lucide React Icons
+*   **Telemetry**: Lightweight client-server logging for security, audit, and performance tracing.
+
+---
+
+## 📂 Project Structure
+
+```
+├── .next/                  # Next.js build output
+├── public/                 # Static assets
+├── src/
+│   ├── app/                # Next.js App Router (Layouts, pages, action endpoints)
+│   │   ├── actions/        # Server Actions (AI analysis)
+│   │   ├── api/chat/       # SSE chat stream handler
+│   │   ├── login/          # Authentication pages
+│   │   └── signup/
+│   ├── components/         # Reusable UI widgets and loaders
+│   ├── features/           # Modularized domain logic
+│   │   ├── auth/           # Authenticated route guards
+│   │   ├── chat/           # Conversational AI coach service
+│   │   ├── interviews/     # Mock prep sessions, unit tests, and metrics
+│   │   ├── jobs/           # Match engine, parsing, and query builders
+│   │   └── applications/   # Kanban pipelines and analytics
+│   ├── lib/                # Shared clients (Supabase client proxy, OpenRouter)
+│   └── middleware.ts       # Route protector (session validation)
+├── supabase/
+│   └── schema.sql          # PostgreSQL DDL migrations script
+├── package.json
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Local Development Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Prerequisites
+Ensure you have Node.js (v18+) and npm installed.
 
-## Learn More
+### 2. Clone and Install Dependencies
+```bash
+git clone https://github.com/Avinay45/career-os.git
+cd career-os
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Configure Environment Variables
+Create a `.env.local` file in the root directory and add your credentials (do not commit this file):
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# OpenRouter Configuration
+OPENROUTER_API_KEY="your-openrouter-api-key"
+OPENROUTER_MODEL="nousresearch/hermes-3-llama-3.1-70b"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Direct PostgreSQL Connection String
+DATABASE_URL="postgresql://postgres:your-db-password@db.your-project.supabase.co:5432/postgres"
+```
 
-## Deploy on Vercel
+### 4. Execute Database Migrations
+Deploy the database schema, compound performance indexes, RLS policies, and triggers on your Supabase project:
+```bash
+npx tsx run-migrations.ts
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Start the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧪 Testing and Quality Assurance
+
+We maintain unit, security, and performance test suites:
+
+*   **Security Validation**: Verify rate-limiting and input prompt injection sanitizers:
+    ```bash
+    npx tsx verify-security.ts
+    ```
+*   **Performance Benchmark**: Assert context compilation speed and tab-targeted token pruning:
+    ```bash
+    npx tsx verify-performance.ts
+    ```
+*   **Interview Intelligence**: Run unit testing checks on behavioral evaluation metrics:
+    ```bash
+    npx tsx src/features/interviews/tests/run-tests.ts
+    ```
+*   **Production Compilation**: Ensure the build succeeds cleanly:
+    ```bash
+    npm run build
+    ```
+
+---
+
+## ☁️ Production Deployment on Vercel
+
+1. Push your repository to a private GitHub repository.
+2. Link your repository inside the Vercel Dashboard.
+3. Configure the 6 environment variables listed under the local setup section.
+4. Deploy. Vercel will configure SSL automatically and serve the app serverlessly.
