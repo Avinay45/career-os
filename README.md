@@ -67,20 +67,7 @@ npm install
 ```
 
 ### 3. Configure Environment Variables
-Create a `.env.local` file in the root directory and add your credentials (do not commit this file):
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
-SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
-
-# OpenRouter Configuration
-OPENROUTER_API_KEY="your-openrouter-api-key"
-OPENROUTER_MODEL="nousresearch/hermes-3-llama-3.1-70b"
-
-# Direct PostgreSQL Connection String
-DATABASE_URL="postgresql://postgres:your-db-password@db.your-project.supabase.co:5432/postgres"
-```
+Locate the `.env.local` configuration values provided to you and add them to your local project directory. Do not commit this file.
 
 ### 4. Execute Database Migrations
 Deploy the database schema, compound performance indexes, RLS policies, and triggers on your Supabase project:
